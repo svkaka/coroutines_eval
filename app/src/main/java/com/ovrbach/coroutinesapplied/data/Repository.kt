@@ -1,37 +1,40 @@
 package com.ovrbach.coroutinesapplied.data
 
-import kotlinx.coroutines.channels.Channel
+import com.ovrbach.coroutinesapplied.util.logd
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class Repository(
         private val local: Local = Local(),
         private val remote: Remote = Remote()
 ) {
 
-    suspend fun loadData(): ReceiveChannel<List<String>> {
-        val channel = Channel<List<String>>(2)
+    suspend fun loadData(scope: CoroutineScope): ReceiveChannel<List<String>> {
+        val channel = BroadcastChannel<List<String>>(2)
 
-        return coroutineScope {
-
-            val source = produce(capacity = 2) {
-                val local = local.loadData()
-                send(local)
-
-                val remote = remote.loadData()
-                send(remote)
-
+        return scope.produce(capacity = 2) {
+            launch {
+                val localData = local.loadData()
+                send(localData)
             }
-            source
+            launch {
+                val remoteData = remote.loadData()
+                send(remoteData)
+            }
+            invokeOnClose {
+                logd("Closing channel")
+            }
         }
-
     }
 
     suspend fun insertData(item: String, wait: Long): Boolean {
 
         return true
+
     }
-
-
 }
+
+

@@ -27,20 +27,20 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         findViewById<View>(R.id.reload).setOnClickListener {
             loadData()
         }
-
-
     }
 
+
     fun loadData() {
+        textView.text = "LOADING"
         launch {
-            repository.loadData().consumeEach { loaded ->
+            repository.loadData(this).consumeEach { loaded ->
                 withContext(Dispatchers.Main) {
-                    logd("Loaded ${loaded.size}, $loaded")
+                    logd("Presenting: ${loaded.size}, $loaded")
                     textView.text = loaded.joinToString { "$it\n" }
                 }
             }
-
-
         }
     }
+
+
 }

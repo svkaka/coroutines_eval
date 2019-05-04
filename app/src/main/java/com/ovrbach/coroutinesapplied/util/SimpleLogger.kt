@@ -3,7 +3,7 @@ package com.ovrbach.coroutinesapplied.util
 import android.util.Log
 
 fun Any.logd(message: String) {
-    Log.d(this.javaClass.simpleName, message)
+   println(message)
 }
 
 fun Any.loge(error: Throwable) {

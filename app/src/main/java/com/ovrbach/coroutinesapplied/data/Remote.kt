@@ -1,6 +1,7 @@
 package com.ovrbach.coroutinesapplied.data
 
 import com.ovrbach.coroutinesapplied.util.logd
+import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 class Remote : Source {
@@ -9,9 +10,9 @@ class Remote : Source {
 
     override suspend fun loadData(): List<String> {
         logd("Loading remote started")
-        val wait = Random.nextLong(0, 500)
-        Thread.sleep(wait)
-        logd("Loading took $wait")
+        val wait = Random.nextLong(1000)
+        delay(wait)
+        logd("Remote loading took $wait")
         logd("Loading remote finished: ${data.size}, $data")
         return data
     }

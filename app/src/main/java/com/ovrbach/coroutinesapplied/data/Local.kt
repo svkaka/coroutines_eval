@@ -1,6 +1,7 @@
 package com.ovrbach.coroutinesapplied.data
 
 import com.ovrbach.coroutinesapplied.util.logd
+import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 class Local : Source {
@@ -9,9 +10,9 @@ class Local : Source {
 
     override suspend fun loadData(): List<String> {
         logd("Loading local started")
-        val wait = Random.nextLong(1000, 2000)
-        Thread.sleep(wait)
-        logd("Loading took $wait")
+        val wait = Random.nextLong(500)
+        delay(wait)
+        logd("Local loading took $wait")
         logd("Loading local finished: ${data.size}, $data")
         return data
     }
